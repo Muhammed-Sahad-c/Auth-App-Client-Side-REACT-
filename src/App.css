@@ -1,0 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans&display=swap");
+* {
+  margin: 0%;
+  box-sizing: border-box;
+  font-family: "DM Sans", sans-serif;
+}

@@ -1,0 +1,22 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.otp {
+    letter-spacing: 8px;
+}
+
+
+.resent:hover{
+  cursor: pointer;
+  text-decoration: underline;
+  color: blue;
+}
