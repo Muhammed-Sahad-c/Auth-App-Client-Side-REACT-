@@ -4,11 +4,11 @@ I developed an authentication application using the MERN stack, which includes M
 
 Pages 
 
-Login page.
-Signup Page.
-OTP verification.
-Profile.
-Reset Password page.
+* Login page.
+* Signup Page.
+* OTP verification.
+* Profile.
+* Reset Password page.
 
 
 Libraries Which i used
