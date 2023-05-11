@@ -58,7 +58,8 @@
 .googleOuter{
     transition: 0.7s;
     box-shadow: 2px 0px 14px 1px rgba(47, 75, 40, 0.404);
-    border-radius:4px;
+    /* border-radius:4px; */
+    border-radius:433rem;
     padding: 4px;
 }
 
