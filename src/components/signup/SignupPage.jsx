@@ -67,7 +67,7 @@ function SignupPage() {
                                         <div className='d-flex'>
                                         </div>
                                     </form>
-                                    {/* with google */}
+                                    {/* Signup with google */}
                                     <div className="d-flex justify-content-center mt-4">
                                         <button className='text-decoration-none text-dark' style={{ background: 'white' }} onClick={() => alert('f')}>
                                             <div className='googleOuter d-flex justify-content-center '>
