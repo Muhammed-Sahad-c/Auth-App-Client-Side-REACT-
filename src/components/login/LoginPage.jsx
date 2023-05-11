@@ -55,6 +55,16 @@ function LoginPage() {
                                             <small><a href="/reset" className='text-decoration-none'>forgot password ?</a></small>
                                         </div>
                                     </form>
+                                    {/* with google */}
+                                    <div className="d-flex justify-content-center mt-4">
+                                        <button className='text-decoration-none text-dark' style={{ background: 'white' }} onClick={() => alert('f')}>
+                                            <div className='googleOuter d-flex justify-content-center px-4'>
+                                                <div className='googlebutton'> <img src="https://cdn-teams-slug.flaticon.com/google.jpg" alt="" className='google' /></div>
+                                                <div className='googleTextButton  '><small> Log In with google</small></div>
+                                            </div>
+                                        </button>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
