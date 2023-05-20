@@ -13,9 +13,14 @@ export const signupDataSubmission = async (data) => {
   }
 };
 
-export const loginDataAuthentication = (data) => {
-  const config = { headers: { email: data.email, password: data.password } };
-  return API.get("/login", config);
+export const loginDataAuthentication = async (data) => {
+  try {
+    const config = { headers: { email: data.email, password: data.password } };
+    var response = await API.get("/login", config);
+    return response;
+  } catch (err) {
+    return null;
+  }
 };
 
 export const verifyUserEmailToResetPassword = (email) => {

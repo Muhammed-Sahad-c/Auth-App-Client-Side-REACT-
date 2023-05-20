@@ -19,9 +19,18 @@ function Otp() {
   const [otpForm, setOtpForm] = useState({ formStatus: 'd-block', otpFailCount: 0 });
   const { otpFailCount, formStatus } = otpForm;
 
+
+  //error handler function
+  const handleErrors = (status, message = null) => {
+    dispatch(setLoader(status));
+    dispatch(showError(message))
+  }
+
+
   setTimeout(() => {
     if (otpStatus === 'd-block') setOtpStatus('d-none')
   }, 2000)
+
 
   const resend = () => {
     resentOtp().then(response => {
@@ -31,33 +40,31 @@ function Otp() {
     })
   }
 
+
   useEffect(() => {
     // sent API call for checking a email sent or not.
     verifySentEmailBeforeResetPage().then(response => {
       if (!response.data.isAllowed) navigate('/error')
     });
-    dispatch(showError(''));
-    dispatch(setLoader(false))
+    handleErrors(false)
   }, []);
+
 
   //hanlde otp
   const handleFormData = e => {
     console.log(otpForm.otpFailCount)
     dispatch(setLoader(true))
-    if (!otp) {
-      dispatch(showError(`enter 4 digit OTP`))
-      dispatch(setLoader(false))
-    } else {
+    if (!otp) handleErrors(false, `enter 4 digit OTP`)
+    else {
       if (otpFailCount < 3) {
         verifyOTP(otp).then(response => {
           const { status, message, token } = response.data;
           if (status === false) {
-            dispatch(showError(message));
-            dispatch(setLoader(false));
+            handleErrors(false, message)
             setOtpForm({ otpFailCount: otpForm.otpFailCount + 1 });
           } else {
             localStorage.setItem('user_auth_app_token', token)
-            dispatch(setLoader(false));
+            handleErrors(false);
             navigate('/')
           }
         })

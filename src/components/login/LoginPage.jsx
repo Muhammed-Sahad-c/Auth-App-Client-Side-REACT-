@@ -6,34 +6,55 @@ import Spinner from '../spinner/Spinner'
 import { setLoader } from '../../reducers/loadingReducer'
 import { loginDataAuthentication } from '../../API/authAPI'
 import { useNavigate } from 'react-router-dom';
-
+import Alert from '../alert/Alert.jsx';
+import { setAlert } from '../../reducers/AlertReducers.js';
 
 function LoginPage() {
+
     const dispatch = useDispatch();
     var navigate = useNavigate();
+
+    //error handler function
+    const handleErrors = (status, message = null) => {
+        dispatch(setLoader(status));
+        dispatch(showError(message))
+    }
+
     const state = useSelector(state => { return state });
-    const { spinner, error } = state;
+    const { spinner, error, alert } = state;
     const [loginInfo, setLoginInfo] = useState({ email: '', password: '' })
     const { email, password } = loginInfo;
+
+
+    //alert Handler
+    var AlertHandler = () => {
+        if (alert === 'd-block') return <Alert display={alert} />
+    }
+
+
+    //handle form data
     const handleFormData = e => {
         dispatch(setLoader(true))
-        if (!email || !password) {
-            dispatch(showError(`Fill the form`))
-            dispatch(setLoader(false))
-        } else {
+        if (!email || !password) handleErrors(false, 'please fill the form')
+        else {
             loginDataAuthentication(loginInfo).then(response => {
-                const { status, message, token } = response.data
-                if (status === false) {
-                    dispatch(showError(message))
-                    dispatch(setLoader(false))
+                if (response) {
+                    const { status, message, token } = response.data
+                    if (status === false) handleErrors(false, message)
+                    else {
+                        localStorage.setItem('user_auth_app_token', token);
+                        navigate('/')
+                    }
                 } else {
-                    localStorage.setItem('user_auth_app_token', token);
-                    navigate('/')
+                    handleErrors(false)
+                    dispatch(setAlert('d-block'))
                 }
             })
         }
         e.preventDefault();
     }
+
+
     return (
         <div>
             <div className='authPageOuter'>
@@ -70,6 +91,7 @@ function LoginPage() {
                     </div>
                 </div>
             </div>
+            {AlertHandler()}
         </div>
     )
 }

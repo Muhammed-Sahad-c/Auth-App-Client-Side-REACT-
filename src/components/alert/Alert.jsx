@@ -1,13 +1,17 @@
 import React from 'react'
 import './Alert.css';
+import { useDispatch } from 'react-redux';
+import { setAlert } from '../../reducers/AlertReducers.js';
 
-function Alert() {
+
+function Alert(display) {
+    const dispatch = useDispatch();
     var handleClose = () => {
-        alert('js')
+        dispatch(setAlert('d-none'))
     }
     return (
         <div>
-            <div className="alertOuter">
+            <div className={`alertOuter ${display}`}>
                 <div className="container">
                     <div className="row d-flex justify-content-center ">
                         <div className="col-lg-4 col-9 alertInnerBody">
