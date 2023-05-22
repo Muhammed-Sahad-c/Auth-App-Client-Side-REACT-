@@ -1,18 +1,19 @@
 import React from 'react';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch as dispatch, useSelector } from 'react-redux';
+import { useNavigate as navigate } from 'react-router-dom';
 import { showError } from '../../reducers/ErrorReducers.js';
-import Spinner from '../spinner/Spinner'
 import { setLoader } from '../../reducers/loadingReducer'
-import { loginDataAuthentication } from '../../API/authAPI'
-import { useNavigate } from 'react-router-dom';
-import Alert from '../alert/Alert.jsx';
 import { setAlert } from '../../reducers/AlertReducers.js';
+import { loginDataAuthentication } from '../../API/authAPI'
+import Spinner from '../spinner/Spinner'
+import Alert from '../alert/Alert.jsx';
 
 function LoginPage() {
-
-    const dispatch = useDispatch();
-    var navigate = useNavigate();
+    const state = useSelector(state => { return state });
+    const { spinner, error, alert } = state;
+    const [loginInfo, setLoginInfo] = useState({ email: '', password: '' })
+    const { email, password } = loginInfo;
 
     //error handler function
     const handleErrors = (status, message = null) => {
@@ -20,17 +21,8 @@ function LoginPage() {
         dispatch(showError(message))
     }
 
-    const state = useSelector(state => { return state });
-    const { spinner, error, alert } = state;
-    const [loginInfo, setLoginInfo] = useState({ email: '', password: '' })
-    const { email, password } = loginInfo;
-
-
     //alert Handler
-    var AlertHandler = () => {
-        if (alert === 'd-block') return <Alert display={alert} />
-    }
-
+    var AlertHandler = () => { if (alert === 'd-block') return <Alert display={alert} /> }
 
     //handle form data
     const handleFormData = e => {
