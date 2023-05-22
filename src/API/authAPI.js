@@ -24,20 +24,36 @@ export const loginDataAuthentication = async (data) => {
 };
 
 export const verifyUserEmailToResetPassword = (email) => {
-  const config = { headers: { email: email } };
-  return API.get("/verifyemail", config);
+  try {
+    const config = { headers: { email: email } };
+    return API.get("/verifyemail", config);
+  } catch (error) {
+    return null;
+  }
 };
 
 export const updateNewPassword = (updatedPassword) => {
-  return API.post("/updatepassword", { updateNewPassword: updatedPassword });
+  try {
+    return API.post("/updatepassword", { updateNewPassword: updatedPassword });
+  } catch (error) {
+    return null;
+  }
 };
 
 export const verifySentEmailBeforeResetPage = () => {
-  return API.get("/verifyresetpage");
+  try {
+    return API.get("/verifyresetpage");
+  } catch (error) {
+    return null;
+  }
 };
 
 export const getUserDetailsAndVerifyToken = () => {
-  const token = localStorage.getItem("user_auth_app_token");
-  const config = { headers: { token: token } };
-  return API.get("/getuserdetails", config);
+  try {
+    const token = localStorage.getItem("user_auth_app_token");
+    const config = { headers: { token: token } };
+    return API.get("/getuserdetails", config);
+  } catch (error) {
+    return null;
+  }
 };

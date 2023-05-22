@@ -1,17 +1,29 @@
-import axios from "axios"
+import axios from "axios";
 
-const baseURL = 'http://localhost:8000'
+const baseURL = "http://localhost:8000";
 
 const API = axios.create({ baseURL });
 
 export const otpUpdator = () => {
-    return API.get('/updateotp');
-}
+  try {
+    return API.get("/updateotp");
+  } catch (error) {
+    return null;
+  }
+};
 
 export const resentOtp = () => {
-    return API.get('/resentotp');
-}
+  try {
+    return API.get("/resentotp");
+  } catch (error) {
+    return null;
+  }
+};
 
-export const verifyOTP = otp => {
-    return API.post('/verifyotp',{otp:otp})
-}
+export const verifyOTP = (otp) => {
+  try {
+    return API.post("/verifyotp", { otp: otp });
+  } catch (error) {
+    return null;
+  }
+};
