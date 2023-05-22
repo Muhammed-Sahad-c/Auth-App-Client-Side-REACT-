@@ -1,17 +1,16 @@
-import React from 'react'
+import React from 'react';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './otp.css'
-import { useDispatch, useSelector } from 'react-redux';
-import Spinner from '../spinner/Spinner'
+import { useNavigate as navigate } from 'react-router-dom';
+import { useDispatch as dispatch, useSelector } from 'react-redux';
 import { showError } from '../../reducers/ErrorReducers.js';
 import { setLoader } from '../../reducers/loadingReducer';
-import { resentOtp, verifyOTP } from '../../API/otpAPI';
 import { verifySentEmailBeforeResetPage } from '../../API/authAPI';
+import { resentOtp, verifyOTP } from '../../API/otpAPI';
+import Spinner from '../spinner/Spinner';
+import Alert from '../alert/Alert.jsx';
+import './otp.css';
 
 function Otp() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const state = useSelector(state => { return state });
   const { spinner, error } = state;
   const [otp, setOtp] = useState('');
@@ -19,18 +18,19 @@ function Otp() {
   const [otpForm, setOtpForm] = useState({ formStatus: 'd-block', otpFailCount: 0 });
   const { otpFailCount, formStatus } = otpForm;
 
-
   //error handler function
   const handleErrors = (status, message = null) => {
     dispatch(setLoader(status));
-    dispatch(showError(message))
+    dispatch(showError(message));
   }
+
+  //alert Handler
+  var AlertHandler = () => { if (alert === 'd-block') return <Alert display={alert} /> };
 
 
   setTimeout(() => {
-    if (otpStatus === 'd-block') setOtpStatus('d-none')
-  }, 2000)
-
+    if (otpStatus === 'd-block') setOtpStatus('d-none');
+  }, 2000);
 
   const resend = () => {
     resentOtp().then(response => {
@@ -40,11 +40,11 @@ function Otp() {
     })
   }
 
-
   useEffect(() => {
     // sent API call for checking a email sent or not.
     verifySentEmailBeforeResetPage().then(response => {
-      if (!response.data.isAllowed) navigate('/error')
+      if (!response) AlertHandler('d-block');
+      if (!response.data.isAllowed) navigate('/error');
     });
     handleErrors(false)
   }, []);
@@ -52,23 +52,26 @@ function Otp() {
 
   //hanlde otp
   const handleFormData = e => {
-    console.log(otpForm.otpFailCount)
-    dispatch(setLoader(true))
-    if (!otp) handleErrors(false, `enter 4 digit OTP`)
+    dispatch(setLoader(true));
+    if (!otp) handleErrors(false, `enter 4 digit OTP`);
     else {
       if (otpFailCount < 3) {
+        //api call
         verifyOTP(otp).then(response => {
-          const { status, message, token } = response.data;
-          if (status === false) {
-            handleErrors(false, message)
-            setOtpForm({ otpFailCount: otpForm.otpFailCount + 1 });
-          } else {
-            localStorage.setItem('user_auth_app_token', token)
-            handleErrors(false);
-            navigate('/')
+          if (!response) AlertHandler('d-block');
+          else {
+            const { status, message, token } = response.data;
+            if (status === false) {
+              handleErrors(false, message)
+              setOtpForm({ otpFailCount: otpForm.otpFailCount + 1 });
+            } else {
+              localStorage.setItem('user_auth_app_token', token);
+              handleErrors(false);
+              navigate('/');
+            }
           }
         })
-      } else setOtpForm({ formStatus: 'd-none', otpFailCount: otpFailCount })
+      } else setOtpForm({ formStatus: 'd-none', otpFailCount: otpFailCount });
     }
     e.preventDefault();
   }
@@ -97,6 +100,7 @@ function Otp() {
             </div>
           </div>
         </div>
+        {AlertHandler()}
       </div>
     </>
   )
