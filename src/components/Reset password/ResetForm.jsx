@@ -1,38 +1,47 @@
-import React from 'react'
-import { useState } from 'react';
+import { useState, React } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateNewPassword } from '../../API/authAPI.js';
+import { useNavigate } from 'react-router-dom';
 import { showError } from '../../reducers/ErrorReducers.js';
-import { setLoader } from '../../reducers/loadingReducer'
-import {useNavigate} from 'react-router-dom';
+import { setLoader } from '../../reducers/loadingReducer';
+import { updateNewPassword } from '../../API/authAPI.js';
 import Spinner from '../spinner/Spinner.jsx';
+import Alert from '../alert/Alert.jsx';
+import { setAlert } from '../../reducers/AlertReducers.js';
+
 function ResetForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
     const [resetPassword, setResetPassword] = useState({ password: '', confirmPassword: '' });
     const { password, confirmPassword } = resetPassword;
     const state = useSelector(state => { return state });
-    const { error, spinner } = state;
+    const { error, spinner, alert } = state;
+
+    //error handler function
+    const handleErrors = (status, message = null) => {
+        dispatch(setLoader(status));
+        dispatch(showError(message))
+    }
+
+    //alert Handler
+    var alertHandler = () => { if (alert === 'd-block') return <Alert display={alert} /> }
+
     const handleFormData = e => {
         dispatch(setLoader(true))
-        if (!password || !confirmPassword) {
-            dispatch(showError('fill the form'))
-            dispatch(setLoader(false))
-        } else if (password !== confirmPassword) {
-            dispatch(showError(`Password didn't match!`))
-            dispatch(setLoader(false))
-        } else {
+        if (!password || !confirmPassword) handleErrors(false, `please fill the form`)
+        else if (password !== confirmPassword) handleErrors(false, `password didn't match!`)
+        else {
             updateNewPassword(password).then(response => {
-                const { status, meassage } = response.data;
-                if(status){
-                    navigate('/');
-                }else{
-                    dispatch(showError(meassage))
-                    dispatch(setLoader(false))
+                if (response) {
+                    const { status, meassage } = response.data;
+                    if (status) navigate('/');
+                    else handleErrors(false, meassage);
+                } else {
+                    handleErrors(false);
+                    dispatch(setAlert(`d-block`))
                 }
-            }) 
+            })
         }
-        console.log(resetPassword)
         e.preventDefault();
     }
     return (
@@ -62,6 +71,7 @@ function ResetForm() {
                     </div>
                 </div>
             </div>
+            {alertHandler()}
         </div>
     )
 }

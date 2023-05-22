@@ -1,15 +1,13 @@
-import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect, React } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { showError } from '../../reducers/ErrorReducers.js';
-import './signup.css';
-import Spinner from '../spinner/Spinner'
 import { setLoader } from '../../reducers/loadingReducer'
-import { signupDataSubmission } from '../../API/authAPI'
-import { useEffect } from 'react';
-import Alert from '../alert/Alert.jsx';
 import { setAlert } from '../../reducers/AlertReducers.js';
+import { signupDataSubmission } from '../../API/authAPI'
+import Alert from '../alert/Alert.jsx';
+import Spinner from '../spinner/Spinner'
+import './signup.css';
 
 function SignupPage() {
 
@@ -34,9 +32,7 @@ function SignupPage() {
     }
 
     //alert Handler
-    var AlertHandler = () => {
-        if (alert === 'd-block') return <Alert display={alert} />
-    }
+    var alertHandler = () => { if (alert === 'd-block') return <Alert display={alert} /> }
 
 
     // signup data submission
@@ -50,10 +46,10 @@ function SignupPage() {
                 if (response) {
                     const { status, message } = response.data;
                     if (status === true) navigate('/otp');
-                    else handleErrors(false, message)
+                    else handleErrors(false, message);
                 } else {
-                    handleErrors(false)
-                    dispatch(setAlert('d-block'))
+                    handleErrors(false);
+                    dispatch(setAlert('d-block'));
                 }
             })
         }
@@ -101,7 +97,7 @@ function SignupPage() {
                     </div>
                 </div>
             </div>
-            {AlertHandler()}
+            {alertHandler()}
 
         </>
     )

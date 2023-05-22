@@ -23,36 +23,42 @@ export const loginDataAuthentication = async (data) => {
   }
 };
 
-export const verifyUserEmailToResetPassword = (email) => {
+export const verifyUserEmailToResetPassword = async (email) => {
   try {
     const config = { headers: { email: email } };
-    return API.get("/verifyemail", config);
+    var response = await API.get("/verifyemail", config);
+    return response;
   } catch (error) {
     return null;
   }
 };
 
-export const updateNewPassword = (updatedPassword) => {
+export const updateNewPassword = async (updatedPassword) => {
   try {
-    return API.post("/updatepassword", { updateNewPassword: updatedPassword });
+    var response = await API.post("/updatepassword", {
+      updateNewPassword: updatedPassword,
+    });
+    return response;
   } catch (error) {
     return null;
   }
 };
 
-export const verifySentEmailBeforeResetPage = () => {
+export const verifySentEmailBeforeResetPage = async () => {
   try {
-    return API.get("/verifyresetpage");
+    var response = await API.get("/verifyresetpage");
+    return response;
   } catch (error) {
     return null;
   }
 };
 
-export const getUserDetailsAndVerifyToken = () => {
+export const getUserDetailsAndVerifyToken = async() => {
   try {
     const token = localStorage.getItem("user_auth_app_token");
     const config = { headers: { token: token } };
-    return API.get("/getuserdetails", config);
+    var response = await API.get("/getuserdetails", config);
+    return response
   } catch (error) {
     return null;
   }

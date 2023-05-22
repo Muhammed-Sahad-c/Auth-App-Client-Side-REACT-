@@ -1,34 +1,46 @@
 import React from 'react'
-import './resetPassword.css'
-import Spinner from '../spinner/Spinner'
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { showError } from '../../reducers/ErrorReducers.js';
 import { setLoader } from '../../reducers/loadingReducer'
+import { setAlert } from '../../reducers/AlertReducers';
 import { verifyUserEmailToResetPassword } from '../../API/authAPI';
+import Spinner from '../spinner/Spinner'
+import Alert from '../alert/Alert';
+import './resetPassword.css'
+
 function ResetPassword() {
   const dispatch = useDispatch();
   const state = useSelector(state => { return state });
-  const { error, spinner } = state;
+  const { error, spinner, alert } = state;
   const [email, setEmail] = useState('');
+
+  //error handler function
+  const handleErrors = (status, message = null) => {
+    dispatch(setLoader(status));
+    dispatch(showError(message))
+  }
+
+  //alert Handler
+  var alertHandler = () => { if (alert === 'd-block') return <Alert display={alert} /> }
+
   const handleFormData = e => {
+    e.preventDefault();
     dispatch(setLoader(true));
-    if (!email) {
-      dispatch(showError(`Please Enter the Email`))
-      dispatch(setLoader(false));
-      e.preventDefault();
-    } else {
+    if (!email) handleErrors(false, `please enter the email`);
+    else {
       verifyUserEmailToResetPassword(email).then(response => {
-        const { status, message } = response.data;
-        if (status) { } else {
-          dispatch(showError(message))
-          dispatch(setLoader(false));
-          e.preventDefault();
+        if (response) {
+          const { status, message } = response.data;
+          if (!status) handleErrors(false, message);
+        } else {
+          handleErrors(false);
+          dispatch(setAlert(`d-block`))
         }
       })
-
     }
   }
+
   return (
     <div>
       <div>
@@ -53,7 +65,7 @@ function ResetPassword() {
           </div>
         </div>
       </div>
-
+      {alertHandler()}
     </div>
   )
 }

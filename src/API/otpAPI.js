@@ -4,25 +4,28 @@ const baseURL = "http://localhost:8000";
 
 const API = axios.create({ baseURL });
 
-export const otpUpdator = () => {
+export const otpUpdator = async () => {
   try {
-    return API.get("/updateotp");
+    var response = await API.get("/updateotp");
+    return response;
   } catch (error) {
     return null;
   }
 };
 
-export const resentOtp = () => {
+export const resentOtp = async () => {
   try {
-    return API.get("/resentotp");
+    var response = await API.get("/resentotp");
+    return response;
   } catch (error) {
     return null;
   }
 };
 
-export const verifyOTP = (otp) => {
+export const verifyOTP = async (otp) => {
   try {
-    return API.post("/verifyotp", { otp: otp });
+    var response = await API.post("/verifyotp", { otp: otp });
+    return response;
   } catch (error) {
     return null;
   }

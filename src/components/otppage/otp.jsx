@@ -9,6 +9,7 @@ import { resentOtp, verifyOTP } from '../../API/otpAPI';
 import Spinner from '../spinner/Spinner';
 import Alert from '../alert/Alert.jsx';
 import './otp.css';
+import { setAlert } from '../../reducers/AlertReducers.js';
 
 function Otp() {
   const state = useSelector(state => { return state });
@@ -43,7 +44,7 @@ function Otp() {
   useEffect(() => {
     // sent API call for checking a email sent or not.
     verifySentEmailBeforeResetPage().then(response => {
-      if (!response) AlertHandler('d-block');
+      if (!response) dispatch(setAlert('d-none'));
       if (!response.data.isAllowed) navigate('/error');
     });
     handleErrors(false)
