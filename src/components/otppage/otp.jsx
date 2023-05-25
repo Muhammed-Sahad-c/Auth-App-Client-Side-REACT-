@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useNavigate as navigate } from 'react-router-dom';
-import { useDispatch as dispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { showError } from '../../reducers/ErrorReducers.js';
 import { setLoader } from '../../reducers/loadingReducer';
 import { verifySentEmailBeforeResetPage } from '../../API/authAPI';
@@ -12,6 +12,10 @@ import './otp.css';
 import { setAlert } from '../../reducers/AlertReducers.js';
 
 function Otp() {
+  var dispatch = useDispatch()
+  var navigate = useNavigate()
+
+  
   const state = useSelector(state => { return state });
   const { spinner, error } = state;
   const [otp, setOtp] = useState('');

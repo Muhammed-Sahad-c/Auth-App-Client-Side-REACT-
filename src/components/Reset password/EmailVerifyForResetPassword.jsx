@@ -32,7 +32,8 @@ function ResetPassword() {
       verifyUserEmailToResetPassword(email).then(response => {
         if (response) {
           const { status, message } = response.data;
-          if (!status) handleErrors(false, message);
+          if (status === true) handleErrors(false); //need to change here
+          else handleErrors(false, message);
         } else {
           handleErrors(false);
           dispatch(setAlert(`d-block`))
