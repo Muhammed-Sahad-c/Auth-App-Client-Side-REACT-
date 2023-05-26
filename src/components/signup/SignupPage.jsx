@@ -9,8 +9,11 @@ import Alert from '../alert/Alert.jsx';
 import Spinner from '../spinner/Spinner'
 import './signup.css';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { useGoogleLogin } from '@react-oauth/google';
-import { getDetailsFromGoogle } from '../../API/googleAuthAPI.js';
+import { getDetailsFromGoogle, signupWithGoogleDataSubmission } from '../../API/googleAuthAPI.js';
 
 
 function SignupPage() {
@@ -68,9 +71,21 @@ function SignupPage() {
                     //update data in backend
                     const data = {
                         email: userDetails.data.email,
-                        name: userDetails.data.name,
+                        username: userDetails.data.name,
+                        google: true
                     }
-                     
+                    signupWithGoogleDataSubmission(data).then(response => {
+                        if (!response) dispatch(setAlert(`d-block`));
+                        else {
+                            const { token, message, status } = response.data;
+                            if (status === false) toast(message)
+                            else {
+                                localStorage.setItem('user_auth_app_token', token);
+                                navigate('/');
+                                handleErrors(false);
+                            }
+                        }
+                    })
                 }
             })
         },
@@ -114,7 +129,7 @@ function SignupPage() {
                 </div>
             </div>
             {alertHandler()}
-
+            <ToastContainer />
         </>
     )
 }

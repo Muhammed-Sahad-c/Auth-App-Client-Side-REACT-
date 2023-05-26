@@ -21,4 +21,11 @@ export const getDetailsFromGoogle = async (token) => {
   }
 };
 
-export const signupWithGoogleDataSubmission = async (userData) => {};
+export const signupWithGoogleDataSubmission = async (userData) => {
+  try {
+    var response = API.post("/googlesignup",userData);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};

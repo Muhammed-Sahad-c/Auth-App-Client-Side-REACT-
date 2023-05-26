@@ -14,7 +14,6 @@ import { setAlert } from '../../reducers/AlertReducers.js';
 function Otp() {
   var dispatch = useDispatch()
   var navigate = useNavigate()
-
   
   const state = useSelector(state => { return state });
   const { spinner, error } = state;
@@ -71,8 +70,8 @@ function Otp() {
               setOtpForm({ otpFailCount: otpForm.otpFailCount + 1 });
             } else {
               localStorage.setItem('user_auth_app_token', token);
-              handleErrors(false);
               navigate('/');
+              handleErrors(false);
             }
           }
         })
