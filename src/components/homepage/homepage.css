@@ -37,12 +37,17 @@
   background-color: rgb(21, 28, 48);
 }
 
-
-.btnforlgout{
-    background-color: inherit;
-    border: 1px solid white;
+.btnforlgout {
+  background-color: inherit;
+  border: 1px solid white;
 }
 
-.profileInfo{
-    box-shadow: 0px 0px 50px 1px grey;
+.profileInfo {
+  box-shadow: 0px 0px 50px 1px grey;
+}
+
+.profileImage {
+  width: 170px;
+  height: 134px;
+  border-radius: 100rem;
 }
