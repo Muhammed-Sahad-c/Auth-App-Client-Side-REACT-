@@ -13,7 +13,6 @@ import ResetPass from "./pages/ResetPass";
 function App() {
   return (
     <div className="App">
-
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -25,7 +24,6 @@ function App() {
           <Route path="*" element={<Error />} />
         </Routes>
       </BrowserRouter>
-
     </div>
   );
 }

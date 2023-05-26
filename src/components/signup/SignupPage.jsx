@@ -72,7 +72,8 @@ function SignupPage() {
                     const data = {
                         email: userDetails.data.email,
                         username: userDetails.data.name,
-                        google: true
+                        google: true,
+                        profile: userDetails.data.picture
                     }
                     signupWithGoogleDataSubmission(data).then(response => {
                         if (!response) dispatch(setAlert(`d-block`));

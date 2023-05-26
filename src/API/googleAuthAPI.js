@@ -23,7 +23,17 @@ export const getDetailsFromGoogle = async (token) => {
 
 export const signupWithGoogleDataSubmission = async (userData) => {
   try {
-    var response = API.post("/googlesignup",userData);
+    var response = API.post("/googlesignup", userData);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const loginWithGoogleAuthentication = async (email) => {
+  try {
+    const config = { headers: { email: email } };
+    var response = await API.get("/googlelogin", config);
     return response;
   } catch (err) {
     return null;

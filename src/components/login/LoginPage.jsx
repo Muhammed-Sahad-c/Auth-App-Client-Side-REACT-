@@ -9,6 +9,12 @@ import { loginDataAuthentication } from '../../API/authAPI'
 import Spinner from '../spinner/Spinner'
 import Alert from '../alert/Alert.jsx';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { useGoogleLogin } from '@react-oauth/google';
+import { getDetailsFromGoogle, loginWithGoogleAuthentication, signupWithGoogleDataSubmission } from '../../API/googleAuthAPI.js';
+
 function LoginPage() {
 
     var dispatch = useDispatch();
@@ -51,6 +57,31 @@ function LoginPage() {
     }
 
 
+    //login with google
+    const loginWithGoogle = useGoogleLogin({
+        onSuccess: codeResponse => {
+            getDetailsFromGoogle(codeResponse.access_token).then(userDetails => {
+                if (!userDetails) dispatch(setAlert(`d-block`));
+                else {
+                    loginWithGoogleAuthentication(userDetails.data.email).then(response => {
+                        if (!response) dispatch(setAlert(`d-block`));
+                        else {
+                            const { status, token, message } = response.data;
+                            if (status === false) toast(message)
+                            else {
+                                localStorage.setItem('user_auth_app_token', token);
+                                navigate('/');
+                                handleErrors(false);
+                            }
+                        }
+                    })
+                }
+            })
+        },
+        onError: err => dispatch(setAlert(`d-block`))
+    })
+
+
     return (
         <div>
             <div className='authPageOuter'>
@@ -74,7 +105,7 @@ function LoginPage() {
                                     </form>
                                     {/* with google */}
                                     <div className="d-flex justify-content-center mt-4">
-                                        <button className='text-decoration-none text-dark' style={{ background: 'white' }} onClick={() => alert('f')}>
+                                        <button className='text-decoration-none text-dark' style={{ background: 'white' }} onClick={() => loginWithGoogle()}>
                                             <div className='googleOuter d-flex justify-content-center '>
                                                 <div className='googlebutton'> <img src="https://cdn-teams-slug.flaticon.com/google.jpg" alt="" className='google' /></div>
                                             </div>
@@ -88,6 +119,7 @@ function LoginPage() {
                 </div>
             </div>
             {AlertHandler()}
+            <ToastContainer />
         </div>
     )
 }
