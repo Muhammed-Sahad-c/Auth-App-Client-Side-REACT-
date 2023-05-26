@@ -53,12 +53,12 @@ export const verifySentEmailBeforeResetPage = async () => {
   }
 };
 
-export const getUserDetailsAndVerifyToken = async() => {
+export const getUserDetailsAndVerifyToken = async () => {
   try {
     const token = localStorage.getItem("user_auth_app_token");
     const config = { headers: { token: token } };
     var response = await API.get("/getuserdetails", config);
-    return response
+    return response;
   } catch (error) {
     return null;
   }

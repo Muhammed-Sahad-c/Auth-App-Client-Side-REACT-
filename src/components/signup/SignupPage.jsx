@@ -9,6 +9,10 @@ import Alert from '../alert/Alert.jsx';
 import Spinner from '../spinner/Spinner'
 import './signup.css';
 
+import { useGoogleLogin } from '@react-oauth/google';
+import { getDetailsFromGoogle } from '../../API/googleAuthAPI.js';
+
+
 function SignupPage() {
 
     const dispatch = useDispatch();
@@ -56,10 +60,22 @@ function SignupPage() {
         e.preventDefault();
     }
 
-    //signup with google 
-    const signupWithGoogle = () => {
-        alert('fuck ou')
-    }
+    const signUpWithGoogle = useGoogleLogin({
+        onSuccess: codeResponse => {
+            getDetailsFromGoogle(codeResponse.access_token).then(userDetails => {
+                if (!userDetails) dispatch(setAlert(`d-block`));
+                else {
+                    //update data in backend
+                    const data = {
+                        email: userDetails.data.email,
+                        name: userDetails.data.name,
+                    }
+                     
+                }
+            })
+        },
+        onError: error => dispatch(setAlert(`d-block`))
+    });
 
     return (
         <>
@@ -85,7 +101,7 @@ function SignupPage() {
                                     </form>
                                     {/* Signup with google */}
                                     <div className="d-flex justify-content-center mt-4">
-                                        <button className='text-decoration-none text-dark' style={{ background: 'white' }} onClick={() => signupWithGoogle()}>
+                                        <button className='text-decoration-none text-dark' style={{ background: 'white' }} onClick={() => signUpWithGoogle()}>
                                             <div className='googleOuter d-flex justify-content-center '>
                                                 <div className='googlebutton'> <img src="https://cdn-teams-slug.flaticon.com/google.jpg" alt="" className='google' /></div>
                                             </div>
